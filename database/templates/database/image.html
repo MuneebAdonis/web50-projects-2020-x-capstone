@@ -1,0 +1,45 @@
+{% extends "database/layout.html" %}
+{% load static %}
+{% block body %}
+
+{% if user.is_authenticated %}
+<button style ="margin-left: 2.5%;" class="btn btn-secondary" onclick="history.back()">Back to Search Results</button>
+{% endif %}
+<div name = "main_outter" style="display: flex;">
+    <div class="search_border" style="margin-top: 1%; width: 25%; flex: 1;">
+        <b>ID: {{image.id}}</b>
+        <a href="{% static 'database/images/'%}{{image.id}}.svs" download="">
+            <button class="btn btn-secondary btn-sm" style="float: right;">Download Image</button>
+        </a>
+        <hr>
+        Stain: {{image.stain}}<br>
+        Label: {{image.label}}<hr>  
+        Age: {{image.age}}<br>
+        Gender: {{image.gender}}<hr>
+        System: {{image.tissue.system}}<br>
+        Tissue: {{image.tissue}}<br>
+        Diagnosis: {{image.diagnosis}}<br>
+        Updoaded: {{image.date| date:"d b Y"}}
+    </div>
+    <div class="search_border" style="margin:1% 2.5% 2.5% 0%; width: 67.5%;">
+        Clinical Information:
+    </div>
+</div>
+<div class="search_border" style="margin-top: 0%;">
+    {% if user.is_authenticated %}
+        <textarea id ="char_typed" style="width:100%; min-height:5em;" maxlength="5000" oninput="char_left()" placeholder="comment here"></textarea>
+        <div id="char_left">5000/5000 characters remaining</div>
+        <button class="btn btn-secondary" onclick="commentJS('{{image.id}}')">Comment</button><hr>
+    {% endif %}
+    <div id = "comments">
+        {% for comment in comments %}
+        {{comment.comment}}<br>
+        -<i><a href ="{% url 'profile' id=comment.person.id%}">
+            {{comment.person.title}} {{comment.person.first_name| first}} {{comment.person.last_name}}
+        </i></a>
+        ({{comment.date| date:"d b Y. H:i:s"}})<hr>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

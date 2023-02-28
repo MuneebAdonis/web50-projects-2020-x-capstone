@@ -1,0 +1,67 @@
+{% extends "database/layout.html" %}
+{% load static %}
+{% block body %}
+
+<div class="search_border" style="line-height: 30px; margin-top: 0.95%;">
+    {{message}}<hr>
+    <div id="info">
+        <label>Username: </label><b>{{person.username}}</b><br>
+        <label>Title: </label>{{person.title}}<br>
+        <label>Firstname: </label>{{person.first_name}}<br>
+        <label>Surname: </label>{{person.last_name}}<br>
+        <label>Email: </label>{{person.email}}<br>
+        {% if user.id == person.id %}
+        <button class="btn btn-secondary btn-sm btn-block" onclick="edit_profile()">Edit</button><br>
+        <button class="btn btn-secondary btn-sm btn-block" style="margin-top: 15px" onclick="change_password()">Change password</button><br>
+    </div>
+
+    <div id = "change_deets" style="display: none;">
+        <form method="post" action="{% url 'profile' id=user.id %}">
+            {% csrf_token %}
+            <label for="username">Username: </label>
+                <input type="text" id="username" name = "username" class="detail_width" value="{{person.username}}"><br>
+            <label for="title">Title: </label>
+            {% for title in titles %}
+                {% if title == person.title %}
+                    {{title}} <input type="radio" id="{{person.title}}" name="title" value="{{title}}" checked>
+                {% else %}
+                    {{title}} <input type="radio" id="{{person.title}}" name="title" value="{{title}}" >
+                {% endif %}
+            {% endfor %}
+            <br>
+            <label for="name">Firstname: </label>
+            <input type="text" id="firstname" name="firstname" class="detail_width" value="{{person.first_name}}"><br>
+            <label for="name">Surname: </label>
+            <input type="text" id="surname" name="surname" class="detail_width" value="{{person.last_name}}"><br>
+            <label for="name">Email: </label>
+            <input type="email" id="email" name="email" class="detail_width" value="{{person.email}}"><br>
+            <input type="submit" class="btn btn-secondary btn-sm" value="Save">
+        </form>
+            <button class="btn btn-secondary btn-sm" onclick="edit_profile()">Back</button>
+    </div>
+    <div id = "pass_change" style="display: none;">
+        <form method="post" action="{% url 'profile' id=user.id %}">
+            {% csrf_token %}
+            <label style="width: 81px;">Username: </label>
+                <b>{{person.username}}</b><br>
+            <label for="passone" style="line-height: 20px;">New Password: </label>
+                <input type="password" id="passone" name= "passone" class="detail_width" required><br>
+            <label for="passtwo" style="line-height: 20px;">Confirm Password: </label>
+                <input type="password" id="passtwo" name= "passtwo" class="detail_width" oninput="checkpword()" required><br>
+                <div id="match">Passwords DO NOT Match</div>
+                <input type="submit" name="save_btn" class="btn btn-secondary btn-sm" value="Save" disabled>
+        </form>
+        <button class="btn btn-secondary btn-sm" onclick="change_password()">Back</button><br>
+    </div>
+    <div>
+        <hr>
+        Can Signup New Users: {{person.signup}}<br>
+        {% if person.signup is True %}
+            <a href="{% url 'signup' %}">
+                <button class="btn btn-secondary btn-sm">Sign Up User</button>
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

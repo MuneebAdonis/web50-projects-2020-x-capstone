@@ -1,0 +1,37 @@
+{% extends "database/layout.html" %}
+{% load static %}
+{% block body %}
+
+<div class="login_border">
+    <div>
+        <!--
+        <img src="{% static 'database/images/SU_FMHS_logo.jpg' %}" style="width: 100%;">
+        -->
+        <img src="{% static 'database/images/harvard_logo.png' %}" style="width: 90%; margin: 5%;">
+    </div>
+    <div>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="login_item">
+                Username: <input type="text" class="min_max" name="username">
+            </div>
+            
+            <div class="login_item">
+                Password: <input type="password" class="min_max" name="password">
+                <br>{{ login_message }}
+            </div>
+            <!-- this for loop gets the autologout to work-->
+            {% for message in messages %}
+                <div class="login_item">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            
+            <div class="login_item"> 
+                <input type="submit" value="Login" class="btn btn-secondary">
+            </div>         
+        </form>            
+    </div>         
+</div>
+
+{% endblock %}

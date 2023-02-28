@@ -1,0 +1,110 @@
+{% extends "database/layout.html" %}
+{% load static %}
+{% block body %}
+{{ redirect_to_login_immediately }}
+<div class="search_border">
+    <form action="{% url 'index' %}" method="get">
+        <div class = 'table-responsive-md'>
+            <table class="table table-striped">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">System</th>
+                    <th scope="col">Tissue</th>
+                    <th scope="col">Diagnosis</th>
+                    <th scope="col">Stain</th>
+                    <th scope="col"></th>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="number" name = "id" min="1" max ={{id_max}} placeholder="All" style="width:6em">
+                    </td>
+                    <td>
+                        <input type= "number" placeholder = "Min" min="0" max= "150" id="min_age" name="min_age" style="width:4em" onchange="update_min()">
+                        <input type= "number" placeholder = "Max" min="0" max= "150" id="max_age" name="max_age" style="width:4em">
+                    </td>
+                    <td>
+                        <select name="gender">
+                            <option value="all">All</option>
+                            {% for option in gender_options %}
+                            <option value="{{option}}">{{option}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="system" id="system" onchange='get_system()'>
+                            <option value="all">All</option>
+                            {% for option in system_options %}
+                            <option value="{{option}}">{{option}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="tissue" id ="tissue">
+                            <option value="all">All</option>
+                            {% for option in tissue_options %}
+                            <option value="{{option}}">{{option}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="diagnosis">
+                            <option value="all">All</option>
+                            {% for option in diagnosis_options %}
+                            <option value="{{option}}">{{option}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="stain">
+                            <option value="all">All</option>
+                            {% for option in stain_options %}
+                            <option value="{{option}}">{{option}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <input class="btn btn-secondary btn-sm" type="submit" value="Search">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form> 
+</div>
+<div class="search_border">
+    <div class = 'table-responsive-md'>
+        <table class="table table-striped">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Age</th>
+                <th scope="col">Gender</th>
+                <th scope="col">System</th>
+                <th scope="col">Tissue</th>
+                <th scope="col">Diagnosis</th>
+                <th scope="col">Stain</th>
+                <th scope="col">Link</th>
+            </tr>
+            {% for result in results %}
+            <tr>        
+                <td>{{result.id}}</td>
+                <td>{{result.age}}</td>
+                <td>{{result.gender}}</td>
+                <td>{{result.tissue.system}}</td>
+                <td>{{result.tissue}}</td>
+                <td>{{result.diagnosis}}</td>
+                <td>{{result.stain}}</td>
+                <td>     
+                    <a href="{% url 'image' id=result.id %}">
+                        <button class="btn btn-secondary btn-sm">Open Slide</button>
+                    </a>
+                </td>
+                
+            
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

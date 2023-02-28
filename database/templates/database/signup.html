@@ -1,0 +1,38 @@
+{% extends "database/layout.html" %}
+{% load static %}
+{% block body %}
+
+<div class = "search_border">
+{{message}}<hr>
+{% if user.is_authenticated %}
+    <form method="post" action = "{% url 'signup' %}">
+        {% csrf_token %}
+        <label for="username" class="sign_label">Username: </label>
+            <input type="text" id="username" name = "username" class="detail_width" placeholder="username" required><br>
+        <label for="passone" class="sign_label">Password: </label>
+            <input type="password" id="passone" name= "passone" class="detail_width" placeholder="password" required><br>
+        <label for="passtwo" class="sign_label">Confirm Password: </label>
+            <input type="password" id="passtwo" name= "passtwo" class="detail_width" placeholder="confirm password" oninput="checkpword()" required>
+            <div id="match">Passwords DO NOT Match</div><hr>
+        <label for="title" class="sign_label">Title: </label>
+        {% for title in titles %}
+                {{title}} <input type="radio" id="{{person.title}}" name="title" value="{{title}}" required>
+        {% endfor %}
+        <br>
+        <label for="name" class="sign_label">Firstname: </label>
+        <input type="text" id="firstname" name="firstname" class="detail_width" placeholder="firstname" required><br>
+        <label for="surname" class="sign_label">Surname: </label>
+        <input type="text" id="surname" name="surname" class="detail_width" placeholder="surname" required><br>
+        <label for="email" class="sign_label">Email: </label>
+        <input type="email" id="email" name="email" class="detail_width" placeholder="email" required><br>
+        <label for="sign_up" class='sign_label'>Can Signup New Users: </label>
+            True <input type="radio" id="True" name="sign_up" value="True">
+            False <input type="radio" id="False" name="sign_up" value="False" checked><br>
+        <input type="submit" name="save_btn" class="btn btn-secondary btn-sm" value="Save" disabled>
+    </form>
+{% else %}
+    Log in to sign up new user
+{% endif %}
+</div>
+
+{% endblock %}
